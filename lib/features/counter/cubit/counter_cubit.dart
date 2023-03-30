@@ -13,10 +13,12 @@ class CounterCubit extends Cubit<CounterState> {
   final CounterRepository _counterRepository;
 
   Future<void> increment() async {
-    emit(CounterState(
-      value: state.value,
-      status: Status.loading,
-    ));
+    emit(
+      CounterState(
+        value: state.value,
+        status: Status.loading,
+      ),
+    );
     try {
       final newValue = await _counterRepository.increaseValue();
       emit(

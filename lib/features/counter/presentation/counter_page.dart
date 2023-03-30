@@ -9,9 +9,7 @@ import 'package:tdd_devinity/features/counter/data/counter_data_source.dart';
 import 'package:tdd_devinity/features/counter/domain/repository/counter_repository.dart';
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({super.key, required this.title});
-
-  final String title;
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,46 +17,60 @@ class CounterPage extends StatelessWidget {
       create: (context) => CounterCubit(CounterRepository(CounterDataSource())),
       child: BlocBuilder<CounterCubit, CounterState>(
         builder: (context, state) {
-          if (state.status == Status.loading) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-            ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Text(
-                      'You have pushed the button this many times:',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    state.value.toString(),
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 128),
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                context.read<CounterCubit>().increment();
-              },
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
-          );
+          return CounterView(state: state);
         },
+      ),
+    );
+  }
+}
+
+class CounterView extends StatelessWidget {
+  const CounterView({
+    super.key,
+    required this.state,
+  });
+
+  final CounterState state;
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.status == Status.loading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter TDD Demo'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Text(
+                'You have pushed the button this many times:',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              state.value.toString(),
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 128),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.read<CounterCubit>().increment();
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const CounterPage(title: 'Flutter Demo Home Page'),
+      home: const CounterPage(),
     );
   }
 }
